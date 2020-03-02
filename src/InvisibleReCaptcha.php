@@ -103,7 +103,7 @@ class InvisibleReCaptcha
      */
     public function renderPolyfill()
     {
-        return '<script type="application/script" src="' . $this->getPolyfillJs() . '"></script>' . PHP_EOL;
+        return '<script type="application/javascript" src="' . $this->getPolyfillJs() . '"></script>' . PHP_EOL;
     }
 
     /**
@@ -130,9 +130,9 @@ class InvisibleReCaptcha
      */
     public function renderFooterJS($lang = null)
     {
-        $html = '<script type="application/script" src="' . $this->getCaptchaJs($lang) . '" async defer></script>' . PHP_EOL;
-        $html .= '<script type="application/script">var _submitForm,_captchaForm,_captchaSubmit,_execute=true;</script>';
-        $html .= "<script type=\"application/script\">window.addEventListener('load', _loadCaptcha);" . PHP_EOL;
+        $html = '<script type="application/javascript" src="' . $this->getCaptchaJs($lang) . '" async defer></script>' . PHP_EOL;
+        $html .= '<script type="application/javascript">var _submitForm,_captchaForm,_captchaSubmit,_execute=true;</script>';
+        $html .= "<script type=\"application/javascript\">window.addEventListener('load', _loadCaptcha);" . PHP_EOL;
         $html .= "function _loadCaptcha(){";
         if ($this->getOption('hideBadge', false)) {
             $html .= "document.querySelector('.grecaptcha-badge').style = 'display:none !important;';" . PHP_EOL;
