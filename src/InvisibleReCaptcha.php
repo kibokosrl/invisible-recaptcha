@@ -103,7 +103,7 @@ class InvisibleReCaptcha
      */
     public function renderPolyfill()
     {
-        return '<script src="' . $this->getPolyfillJs() . '"></script>' . PHP_EOL;
+        return '<script type="application/script" src="' . $this->getPolyfillJs() . '"></script>' . PHP_EOL;
     }
 
     /**
@@ -130,12 +130,12 @@ class InvisibleReCaptcha
      */
     public function renderFooterJS($lang = null)
     {
-        $html = '<script src="' . $this->getCaptchaJs($lang) . '" async defer></script>' . PHP_EOL;
-        $html .= '<script>var _submitForm,_captchaForm,_captchaSubmit,_execute=true;</script>';
-        $html .= "<script>window.addEventListener('load', _loadCaptcha);" . PHP_EOL;
+        $html = '<script type="application/script" src="' . $this->getCaptchaJs($lang) . '" async defer></script>' . PHP_EOL;
+        $html .= '<script type="application/script">var _submitForm,_captchaForm,_captchaSubmit,_execute=true;</script>';
+        $html .= "<script type=\"application/script\">window.addEventListener('load', _loadCaptcha);" . PHP_EOL;
         $html .= "function _loadCaptcha(){";
         if ($this->getOption('hideBadge', false)) {
-            $html .= "document.querySelector('.grecaptcha-badge').style = 'display:none;!important'" . PHP_EOL;
+            $html .= "document.querySelector('.grecaptcha-badge').style = 'display:none !important;';" . PHP_EOL;
         }
         $html .= '_captchaForm=document.querySelector("#_g-recaptcha").closest("form");';
         $html .= "_captchaSubmit=_captchaForm.querySelector('[type=submit]');";
@@ -191,11 +191,16 @@ class InvisibleReCaptcha
             return false;
         }
 
-        $response = $this->sendVerifyRequest([
-            'secret' => $this->secretKey,
-            'remoteip' => $clientIp,
-            'response' => $response
-        ]);
+        try {
+            $response = $this->sendVerifyRequest([
+                'secret'   => $this->secretKey,
+                'remoteip' => $clientIp,
+                'response' => $response
+            ]);
+        } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
+            \Illuminate\Support\Facades\Log::error($exception->getMessage());
+            return true;
+        }
 
         return isset($response['success']) && $response['success'] === true;
     }
